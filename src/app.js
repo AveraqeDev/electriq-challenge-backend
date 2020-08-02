@@ -9,6 +9,8 @@ const app = express();
 
 const productsRouter = require('./products/products-router');
 
+const ProductsService = require('./products/products-service');
+
 const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
   : 'common';
@@ -16,6 +18,10 @@ const morganOption = (NODE_ENV === 'production')
 app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
+
+app.get('/', (req, res, next) => {
+  res.json({ auth: `Basic ${ProductsService.getShopifyAuth()}` });
+});
 
 app.use('/products', productsRouter);
 
