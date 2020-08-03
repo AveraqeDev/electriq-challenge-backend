@@ -1,9 +1,19 @@
 const app = require('../src/app');
+const { expect } = require('chai');
 
-describe('App', () => {
-  it('GET / responds with 200 containing "Hello, world!"', () => {
+describe('Products', () => {
+  it('GET /products responds with 200 containing JSON', () => {
     return supertest(app)
-      .get('/')
-      .expect(200, 'Hello, world!');
+      .get('/products')
+      .expect(200)
+      .expect(res => {
+        expect(res.body).to.have.property('products');
+        res.body.products.forEach(product => {
+          expect(product).to.have.property('id');
+          expect(product).to.have.property('title');
+          expect(product).to.have.property('variants');
+          expect(product).to.have.property('image');
+        });
+      });
   });
 });
